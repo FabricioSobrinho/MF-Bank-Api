@@ -13,10 +13,12 @@
 ActiveRecord::Schema[7.0].define(version: 2023_10_18_183132) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+  enable_extension "uuid-ossp"
 
-  create_table "clients", force: :cascade do |t|
+  create_table "clients", id: { type: :string, limit: 10, default: -> { "substr((uuid_generate_v4())::text, 1, 10)" } }, force: :cascade do |t|
     t.string "provider", default: "email", null: false
     t.string "uid", default: "", null: false
+    t.string "name", null: false
     t.string "encrypted_password", default: "", null: false
     t.string "reset_password_token"
     t.datetime "reset_password_sent_at"
@@ -31,13 +33,12 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_18_183132) do
     t.datetime "last_sign_in_at"
     t.inet "current_sign_in_ip"
     t.inet "last_sign_in_ip"
-    t.string "name", default: "", null: false
     t.string "sur_name"
     t.string "email", default: "", null: false
     t.string "acc_number"
-    t.float "balance"
-    t.string "phone_number"
-    t.string "cpf"
+    t.float "balance", default: 0.0
+    t.string "phone_number", null: false
+    t.string "cpf", null: false
     t.string "cep"
     t.string "uf"
     t.string "date_birth"
