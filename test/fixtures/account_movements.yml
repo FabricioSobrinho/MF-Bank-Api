@@ -1,0 +1,11 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  montant: 1.5
+  sender: MyString
+  type: 
+
+two:
+  montant: 1.5
+  sender: MyString
+  type: 
