@@ -30,4 +30,24 @@ class BalancesController < ApplicationController
       end
   end
 
+  def deposit
+    client_id = current_client.id
+    deposit_amount = params[:deposit_amount].to_f
+    balance = Balance.find_by(client_id: client_id)
+
+    if balance
+        new_balance = balance.user_balance + deposit_amount
+        if balance.update(user_balance: new_balance)
+          AccountMovement.create(
+            montant: deposit_amount,
+            movement_type: 'deposito'
+          )
+          render json: { message: "Deposito bem-sucedido, novo saldo #{new_balance}" }
+        else
+          render json: { error: "Erro ao atualizar o saldo no banco de dados" }, status: :unprocessable_entity
+        end
+    else
+      render json: { error: "Cliente não encontrado" }, status: :not_found
+    end
+  end
 end
