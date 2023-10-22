@@ -10,17 +10,26 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_10_21_183232) do
+ActiveRecord::Schema[7.0].define(version: 2023_10_22_010112) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "uuid-ossp"
 
-  create_table "account_movements", primary_key: "true", id: { type: :string, limit: 10, default: -> { "substr((uuid_generate_v4())::text, 1, 14)" } }, force: :cascade do |t|
+  create_table "account_movements", primary_key: "true", id: { type: :string, limit: 10, default: -> { "substr((uuid_generate_v4())::text, 1, 10)" } }, force: :cascade do |t|
     t.float "montant", null: false
     t.string "sender"
     t.string "movement_type", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "balances", primary_key: "true", id: { type: :string, limit: 10, default: -> { "substr((uuid_generate_v4())::text, 1, 6)" } }, force: :cascade do |t|
+    t.float "user_balance"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "client_id", null: false
+    t.float "default_balance"
+    t.index ["client_id"], name: "index_balances_on_client_id"
   end
 
   create_table "clients", id: { type: :string, limit: 10, default: -> { "substr((uuid_generate_v4())::text, 1, 10)" } }, force: :cascade do |t|
@@ -59,4 +68,5 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_21_183232) do
     t.index ["uid", "provider"], name: "index_clients_on_uid_and_provider", unique: true
   end
 
+  add_foreign_key "balances", "clients"
 end
