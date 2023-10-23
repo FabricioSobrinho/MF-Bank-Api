@@ -18,12 +18,8 @@ class Client < ActiveRecord::Base
 
   private
   def generate_acc_number
-    numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9]
-
-    self.acc_number = ''
-    while self.acc_number.length < 8
-      self.acc_number += numbers.sample.to_s
-    end
+    numbers = (1..9).to_a.shuffle[0, 8].map(&:to_s)
+    self.acc_number = numbers.join
   end
 
   def create_default_balance

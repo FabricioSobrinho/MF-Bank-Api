@@ -41,7 +41,7 @@ class DeviseTokenAuthCreateClients < ActiveRecord::Migration[7.0]
       ## Client Info
       t.string :sur_name
       t.string :email, null: false, default: '', unique: true
-      t.string :acc_number, unique: true
+      t.integer :acc_number, unique: true
       t.float :balance, default: 0
       t.string :phone_number, null: false, unique: true
       t.string :cpf, null: false, unique: true
