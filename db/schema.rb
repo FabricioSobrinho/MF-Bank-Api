@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_10_22_005237) do
+ActiveRecord::Schema[7.0].define(version: 2023_10_23_172939) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "uuid-ossp"
@@ -21,6 +21,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_22_005237) do
     t.string "movement_type", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "client_id", null: false
+    t.index ["client_id"], name: "index_account_movements_on_client_id"
   end
 
   create_table "balances", primary_key: "true", id: { type: :string, limit: 10, default: -> { "substr((uuid_generate_v4())::text, 1, 6)" } }, force: :cascade do |t|
@@ -67,5 +69,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_22_005237) do
     t.index ["uid", "provider"], name: "index_clients_on_uid_and_provider", unique: true
   end
 
+  add_foreign_key "account_movements", "clients"
   add_foreign_key "balances", "clients"
 end
