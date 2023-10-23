@@ -5,6 +5,7 @@ Rails.application.routes.draw do
 
   post 'withdraw' => 'balances#withdraw'
   post 'deposit' => 'balances#deposit'
+  post 'transfer' => 'balances#transfer'
 
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
