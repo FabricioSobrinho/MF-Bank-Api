@@ -16,6 +16,8 @@ class Client < ActiveRecord::Base
 
   after_create :create_default_balance
 
+  has_many :account_movements, dependent: :destroy
+
   private
   def generate_acc_number
     numbers = (1..9).to_a.shuffle[0, 8].map(&:to_s)
