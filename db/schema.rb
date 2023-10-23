@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_10_22_010112) do
+ActiveRecord::Schema[7.0].define(version: 2023_10_22_005237) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "uuid-ossp"
@@ -28,7 +28,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_22_010112) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "client_id", null: false
-    t.float "default_balance"
     t.index ["client_id"], name: "index_balances_on_client_id"
   end
 
@@ -52,7 +51,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_22_010112) do
     t.inet "last_sign_in_ip"
     t.string "sur_name"
     t.string "email", default: "", null: false
-    t.string "acc_number"
+    t.integer "acc_number"
     t.float "balance", default: 0.0
     t.string "phone_number", null: false
     t.string "cpf", null: false
