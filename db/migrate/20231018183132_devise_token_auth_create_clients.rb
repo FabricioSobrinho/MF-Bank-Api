@@ -26,11 +26,6 @@ class DeviseTokenAuthCreateClients < ActiveRecord::Migration[7.0]
       t.datetime :confirmation_sent_at
       t.string   :unconfirmed_email # Only if using reconfirmable
 
-      ## Lockable
-      # t.integer  :failed_attempts, :default => 0, :null => false # Only if lock strategy is :failed_attempts
-      # t.string   :unlock_token # Only if unlock strategy is :email or :both
-      # t.datetime :locked_at
-      #
       ## Trackable
       t.integer  :sign_in_count, default: 0, null: false
       t.datetime :current_sign_in_at
@@ -42,7 +37,6 @@ class DeviseTokenAuthCreateClients < ActiveRecord::Migration[7.0]
       t.string :sur_name
       t.string :email, null: false, default: '', unique: true
       t.integer :acc_number, unique: true
-      t.float :balance, default: 0
       t.string :phone_number, null: false, unique: true
       t.string :cpf, null: false, unique: true
       t.string :cep
