@@ -1,6 +1,11 @@
 class BalancesController < ApplicationController
   before_action :authenticate_client!
 
+  def index
+    @balance = Balance.find_by(client_id: current_client.id)
+
+    render json: @balance.user_balance
+  end
   def show
     @balance = current_client.balance
   end
@@ -16,7 +21,8 @@ class BalancesController < ApplicationController
         if balance.update(user_balance: new_balance)
           AccountMovement.create(
             montant: withdrawal_amount,
-            movement_type: 'saque'
+            movement_type: 'saque',
+            client_id: client_id
           )
           render status: :ok
         else
@@ -40,7 +46,8 @@ class BalancesController < ApplicationController
       if balance.update(user_balance: new_balance)
         AccountMovement.create(
           montant: deposit_amount,
-          movement_type: 'deposito'
+          movement_type: 'deposito',
+          client_id: client_id
         )
         render status: :ok
       else
@@ -52,9 +59,9 @@ class BalancesController < ApplicationController
   end
 
   def transfer
-    client_id = current_client.id
+    sender_client_id = current_client.id
     transfer_amount = params[:transfer_amount].to_f
-    origin_account_balance = Balance.find_by(client_id: client_id)
+    origin_account_balance = Balance.find_by(client_id: sender_client_id)
 
     favored_account_number = params[:favored_account_number]
 
@@ -73,11 +80,14 @@ class BalancesController < ApplicationController
               AccountMovement.create(
                 montant: transfer_amount,
                 movement_type: 'transferência',
-                sender: current_client.name
+                sender: current_client.name,
+                client_id: sender_client_id
               )
               AccountMovement.create(
                 montant: transfer_amount,
-                movement_type: 'transferência'
+                movement_type: 'transferência',
+                sender: current_client.name,
+                client_id: favored_account_id.id.capitalize
               )
               render status: :ok
             else

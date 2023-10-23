@@ -1,21 +1,19 @@
 class AccountMovementsController < ApplicationController
+  before_action :authenticate_client!
   before_action :set_account_movement, only: %i[ show update destroy ]
 
-  # GET /account_movements
   def index
-    @account_movements = AccountMovement.all
+    @account_movements = current_client.account_movements.all
 
     render json: @account_movements
   end
 
-  # GET /account_movements/1
   def show
     render json: @account_movement
   end
 
-  # POST /account_movements
   def create
-    @account_movement = AccountMovement.new(accout_movement_params)
+    @account_movement = current_client.account_movements.new(account_movement_params)
 
     if @account_movement.save
       render json: @account_movement, status: :created, location: @account_movement
@@ -25,13 +23,11 @@ class AccountMovementsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
     def set_account_movement
-      @account_movement = AccountMovement.find(params[:id])
+      @account_movement = current_client.account_movements.find(params[:id])
     end
 
-    # Only allow a list of trusted parameters through.
-    def accout_movement_params
-      params.require(:account_movement).permit(:montant, :sender, :movement_type)
+    def account_movement_params
+      params.require(:account_movement).permit(:montant, :sender, :movement_type, :client_id)
     end
 end
