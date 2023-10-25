@@ -54,7 +54,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_23_172939) do
     t.string "sur_name"
     t.string "email", default: "", null: false
     t.integer "acc_number"
-    t.float "balance", default: 0.0
     t.string "phone_number", null: false
     t.string "cpf", null: false
     t.string "cep"

@@ -17,6 +17,7 @@ class Client < ActiveRecord::Base
   after_create :create_default_balance
 
   has_many :account_movements, dependent: :destroy
+  has_one :balance, dependent: :destroy
 
   private
   def generate_acc_number
