@@ -45,33 +45,36 @@ class BalancesController < ApplicationController
     deposit_favored_account_number = params[:deposit_favored_account]
 
     if balance
-
       if deposit_favored_account_number
         deposit_favored_account_id = Client.find_by(acc_number: deposit_favored_account_number)
         if deposit_favored_account_id
           favored_account_balance = Balance.find_by(client_id: deposit_favored_account_id.id)
+          if deposit_favored_account_id.confirmed_at
+            new_balance = deposit_amount + favored_account_balance.user_balance
+            if favored_account_balance.update(user_balance: new_balance)
+              AccountMovement.create(
+                montant: deposit_amount,
+                movement_type: 'deposito',
+                sender: current_client.name,
+                target: deposit_favored_account_id.name.capitalize,
+                client_id: current_client.id
+              )
 
-          new_balance = deposit_amount + favored_account_balance.user_balance
-          if favored_account_balance.update(user_balance: new_balance)
-            AccountMovement.create(
-              montant: deposit_amount,
-              movement_type: 'deposito',
-              sender: current_client.name,
-              target: deposit_favored_account_id.name.capitalize,
-              client_id: current_client.id
-            )
-
-            AccountMovement.create(
-              montant: deposit_amount,
-              movement_type: 'deposito',
-              sender: current_client.name,
-              client_id: deposit_favored_account_id.id.capitalize
-            )
-            render status: :ok
+              AccountMovement.create(
+                montant: deposit_amount,
+                movement_type: 'deposito',
+                sender: current_client.name,
+                client_id: deposit_favored_account_id.id.capitalize
+              )
+              render status: :ok
+            else
+              render json: { error: "Erro ao atualizar o saldo no banco de dados" }, status: :unprocessable_entity
+            end
           else
+            render json: { error: "Conta favorecida não verificada" }, status: :unprocessable_entity
           end
         else
-          render json: { error: "Favorecido não encontrado" }
+          render json: { error: "Favorecido não encontrado" }, status: :not_found
         end
 
       else
@@ -104,35 +107,38 @@ class BalancesController < ApplicationController
 
       if favored_account_id
         favored_account_balance = Balance.find_by(client_id: favored_account_id.id)
+        if favored_account_id.confirmed_at
+          if origin_account_balance
+            if origin_account_balance.user_balance >= transfer_amount
+              new_origin_account_balance = origin_account_balance.user_balance - transfer_amount
+              new_favored_account_balance = favored_account_balance.user_balance + transfer_amount
 
-        if origin_account_balance
-          if origin_account_balance.user_balance >= transfer_amount
-            new_origin_account_balance = origin_account_balance.user_balance - transfer_amount
-            new_favored_account_balance = favored_account_balance.user_balance + transfer_amount
-
-            if origin_account_balance.update(user_balance: new_origin_account_balance) && favored_account_balance.update(user_balance: new_favored_account_balance)
-              AccountMovement.create(
-                montant: transfer_amount,
-                movement_type: 'transferência',
-                sender: current_client.name,
-                client_id: sender_client_id,
-                target: favored_account_id.name.capitalize
-              )
-              AccountMovement.create(
-                montant: transfer_amount,
-                movement_type: 'transferência',
-                sender: current_client.name,
-                client_id: favored_account_id.id.capitalize
-              )
-              render status: :ok
+              if origin_account_balance.update(user_balance: new_origin_account_balance) && favored_account_balance.update(user_balance: new_favored_account_balance)
+                AccountMovement.create(
+                  montant: transfer_amount,
+                  movement_type: 'transferência',
+                  sender: current_client.name,
+                  client_id: sender_client_id,
+                  target: favored_account_id.name.capitalize
+                )
+                AccountMovement.create(
+                  montant: transfer_amount,
+                  movement_type: 'transferência',
+                  sender: current_client.name,
+                  client_id: favored_account_id.id.capitalize
+                )
+                render status: :ok
+              else
+                render json: { error: "Erro ao atualizar o saldo no banco de dados" }, status: :unprocessable_entity
+              end
             else
-              render json: { error: "Erro ao atualizar o saldo no banco de dados" }, status: :unprocessable_entity
+              render json: { error: "Saldo insuficiente" }, status: :not_found
             end
           else
-            render json: { error: "Saldo insuficiente" }, status: :not_found
+            render json: { error: "Cliente não encontrado" }, status: :not_found
           end
         else
-          render json: { error: "Cliente não encontrado" }, status: :not_found
+          render json: {error: "Conta destinatário não confirmada"}, status: :unprocessable_entity
         end
       else
         render json: { error: "Destinatário não encontrado" }, status: :not_found
