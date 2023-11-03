@@ -18,6 +18,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_23_172939) do
   create_table "account_movements", primary_key: "true", id: { type: :string, limit: 10, default: -> { "substr((uuid_generate_v4())::text, 1, 10)" } }, force: :cascade do |t|
     t.float "montant", null: false
     t.string "sender"
+    t.string "target"
     t.string "movement_type", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
