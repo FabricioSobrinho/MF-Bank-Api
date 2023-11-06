@@ -1,6 +1,6 @@
 # MF-Bank-Api
 
-### Este repositório têm como função tornar possível a execução do projeto MF-Bank na plataforma railway
+### Este repositório tem como função tornar possível a execução do projeto MF-Bank na plataforma railway
 
 
 ## * Versões
