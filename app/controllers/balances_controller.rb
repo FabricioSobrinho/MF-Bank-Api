@@ -4,7 +4,7 @@ class BalancesController < ApplicationController
   def index
     @balance = Balance.find_by(client_id: current_client.id)
 
-    render json: @balance.user_balance
+    render json: { balance: @balance.user_balance }
   end
 
   def show
