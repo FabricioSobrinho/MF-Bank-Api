@@ -64,7 +64,7 @@ class BalancesController < ApplicationController
                 montant: deposit_amount,
                 movement_type: 'deposito',
                 sender: current_client.name,
-                client_id: deposit_favored_account_id.id.capitalize
+                client_id: deposit_favored_account_id.id
               )
               render status: :ok
             else
