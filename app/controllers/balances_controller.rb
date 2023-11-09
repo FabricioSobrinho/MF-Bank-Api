@@ -63,7 +63,7 @@ class BalancesController < ApplicationController
               AccountMovement.create(
                 montant: deposit_amount,
                 movement_type: 'deposito',
-                sender: current_client.name,
+                sender: current_client.name.capitalize,
                 client_id: deposit_favored_account_id.id
               )
               render status: :ok
@@ -118,14 +118,14 @@ class BalancesController < ApplicationController
                   montant: transfer_amount,
                   movement_type: 'transferência',
                   sender: current_client.name,
-                  client_id: sender_client_id,
-                  target: favored_account_id.name.capitalize
+                  target: favored_account_id.name.capitalize,
+                  client_id: sender_client_id
                 )
                 AccountMovement.create(
                   montant: transfer_amount,
                   movement_type: 'transferência',
-                  sender: current_client.name,
-                  client_id: favored_account_id.id.capitalize
+                  sender: current_client.name.capitalize,
+                  client_id: favored_account_id.id
                 )
                 render status: :ok
               else
