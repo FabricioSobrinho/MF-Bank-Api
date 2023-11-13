@@ -39,7 +39,7 @@ class DeviseTokenAuthCreateClients < ActiveRecord::Migration[7.0]
       t.integer :acc_number, unique: true
       t.string :phone_number, null: false, unique: true
       t.string :cpf, null: false, unique: true
-      t.string :cep
+      t.string :cep, null: false
       t.string :uf
       t.string :date_birth
 
@@ -53,8 +53,6 @@ class DeviseTokenAuthCreateClients < ActiveRecord::Migration[7.0]
     add_index :clients, [:uid, :provider],     unique: true
     add_index :clients, :reset_password_token, unique: true
     add_index :clients, :confirmation_token,   unique: true
-    # add_index :users, :unlock_token,         unique: true
-
 
     def generate_acc_number
       numbers = [ 1, 1, 2, 3, 4, 5, 6, 7, 8, 9]
