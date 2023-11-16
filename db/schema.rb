@@ -55,8 +55,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_23_172939) do
     t.string "sur_name"
     t.string "email", default: "", null: false
     t.integer "acc_number"
-    t.string "phone_number", null: false
-    t.string "cpf", null: false
+    t.string "phone_number", default: "", null: false
+    t.string "cpf", default: "", null: false
     t.string "cep", null: false
     t.string "uf"
     t.string "date_birth"
