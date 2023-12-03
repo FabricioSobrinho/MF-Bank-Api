@@ -83,4 +83,4 @@ DeviseTokenAuth.setup do |config|
   # option if you want to make passwords updates to logout other devices.
   config.remove_tokens_after_password_reset = true
 
-end
+  end
