@@ -81,7 +81,7 @@ test:
 #
 production:
   <<: *default
-  url: postgresql://postgres:CbB-Fa5F61BC6E-eAA4b6aE3dcbB*GfB@viaduct.proxy.rlwy.net:55974/railway
+  url: postgresql://postgres:dbA43gaafG-d-B*-161Eeb63A64CBG-c@viaduct.proxy.rlwy.net:21409/railway
 #  database: MF_Bank_Api_production
 #  username: MF_Bank_Api
 #  password: <%#= ENV["MF_BANK_API_DATABASE_PASSWORD"] %>
