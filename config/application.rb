@@ -28,6 +28,6 @@ module MFBankApi
     config.middleware.use ActionDispatch::Cookies
     config.middleware.use config.session_store, config.session_options
 
-    # config.action_controller.raise_on_open_redirects = false
+    config.action_controller.raise_on_open_redirects = false
   end
 end
